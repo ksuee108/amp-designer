@@ -1,0 +1,3 @@
+#!c:\users\user\onedrive - 國立高雄科技大學\文件\github\amp_desige\amp_env\scripts\python.exe
+from numba.pycc import main
+main()

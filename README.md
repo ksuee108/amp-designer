@@ -2,7 +2,7 @@
 
 ### How to run it on your own machine
 
-1. # Install the python verson don't newer then v3.11
+1. # Install the python version don't newer then v3.11
 
     https://www.python.org/downloads/
 

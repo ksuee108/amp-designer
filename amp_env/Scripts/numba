@@ -1,8 +1,0 @@
-#!c:\users\user\onedrive - 國立高雄科技大學\文件\github\amp_desige\amp_env\scripts\python.exe
-# -*- coding: UTF-8 -*-
-from __future__ import print_function, division, absolute_import
-
-from numba.misc.numba_entry import main
-
-if __name__ == "__main__":
-    main()

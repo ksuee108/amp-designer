@@ -98,11 +98,17 @@ with main_tab1:
                             charge_at_pH = bio_analysis.get_charge_at_pH()
                             aromaticity = bio_analysis.get_aromaticity()
                             sec_H, sec_T, sec_S = bio_analysis.get_secondary_structure_fraction()
-                            sequenceLength = bio_analysis.get_sequenceLength()
+                            amphipathicity = bio_analysis.get_amphipathicity()
+                            correlation = bio_analysis.get_auto_correlation()
+                            covariance = bio_analysis.get_auto_covariance()
+                            hydrophobic_moenet = bio_analysis.get_hydrophobic_moenet()
+                            mass = bio_analysis.get_mass()
+                            mz = bio_analysis.get_mz()
+                            SequenceLength = bio_analysis.get_sequenceLength()
 
                             features = {
                                 "Sequence": seq,
-                                'Length': sequenceLength,
+                                'Length': SequenceLength,
                                 'Gravy': Gravy,
                                 'Instability Index': instability_index,
                                 'Aliphatic Index': Aliphatic_Index,
@@ -115,11 +121,16 @@ with main_tab1:
                                 'Secondary structure fraction Turn': sec_T,
                                 'Secondary structure fraction Sheet': sec_S,
                                 'Boman Index': Boman_index,
+                                'Amphipathicity': amphipathicity,
+                                'Correlation': correlation,
+                                'Covariance': covariance,
+                                'Mass': mass,
+                                'Mz': mz,
                             }
                             all_features.append(features)
 
                         except Exception as e:
-                            st.error(f"Error parsing sequence {rec.id}: {e}")
+                            st.error(f"Error parsing Sequence {rec.id}: {e}")
 
             # -------- TXT --------
             elif file_type.endswith(".txt"):
@@ -141,11 +152,17 @@ with main_tab1:
                         charge_at_pH = bio_analysis.get_charge_at_pH()
                         aromaticity = bio_analysis.get_aromaticity()
                         sec_H, sec_T, sec_S = bio_analysis.get_secondary_structure_fraction()
-                        sequenceLength = bio_analysis.get_sequenceLength()
+                        amphipathicity = bio_analysis.get_amphipathicity()
+                        correlation = bio_analysis.get_auto_correlation()
+                        covariance = bio_analysis.get_auto_covariance()
+                        hydrophobic_moenet = bio_analysis.get_hydrophobic_moenet()
+                        mass = bio_analysis.get_mass()
+                        mz = bio_analysis.get_mz()
+                        SequenceLength = bio_analysis.get_sequenceLength()
 
                         features = {
                             "Sequence": seq,
-                            'Length': sequenceLength,
+                            'Length': SequenceLength,
                             'Gravy': Gravy,
                             'Instability Index': instability_index,
                             'Aliphatic Index': Aliphatic_Index,
@@ -158,13 +175,17 @@ with main_tab1:
                             'Secondary structure fraction Turn': sec_T,
                             'Secondary structure fraction Sheet': sec_S,
                             'Boman Index': Boman_index,
+                            'Amphipathicity': amphipathicity,
+                            'Correlation': correlation,
+                            'Covariance': covariance,
+                            'Mass': mass,
+                            'Mz': mz,
                         }
                         all_features.append(features)
 
                     except Exception as e:
-                        st.error(f"Error parsing sequence line {i+1}: {e}")
+                        st.error(f"Error parsing Sequence line {i+1}: {e}")
         all_features = pd.DataFrame(all_features)
-        all_features.rename(columns={"Sequence": "sequence"}, inplace=True)
 
         # ----------------------------
         # Optimization settings
@@ -178,8 +199,9 @@ with main_tab1:
                 'U-NSGA-III', 'AGE-MOEA', 'AGE-MOEA-II'
             ]
         )
+
         pop_size = st.number_input("Population size", min_value=10, max_value=400, value=80, step=10)
-        length = st.number_input("Peptide sequence length", min_value=10, max_value=20, value=10, step=1)
+        length = st.number_input("Peptide Sequence length", min_value=10, max_value=20, value=10, step=1)
         generations = st.number_input("Number of generations", min_value=10, max_value=200, value=100, step=1)
         
     # ----------------------------
@@ -196,7 +218,7 @@ with main_tab1:
         ]
     )
 
-    if len(algorithms) == 0 or uploaded_file is None:
+    if len(Bacteria) == 0 and uploaded_file is None:
         st.warning("Please select at least one optimization algorithm or upload a dataset.")
     
     elif len(opt) < 2:
@@ -281,15 +303,27 @@ with main_tab1:
         # ----------------------------
         st.markdown("---")
 
-        if len(Bacteria) ==0 and uploaded_file is None:
+        if len(Bacteria) == 0 and uploaded_file is None:
             st.warning("Please select at least one bacteria from the sidebar or upload a dataset.")
             st.stop()
-
         elif uploaded_file is not None:
             st.subheader("Uploaded peptide data preview")
             st.dataframe(all_features)
             df = pd.DataFrame(all_features)
-
+            
+            if len(Bacteria) > 0:
+                # 合併選擇的細菌 CSV
+                dfs = [df]
+                for b in Bacteria:
+                    try:
+                        temp_df = pd.read_csv(f"dataset/biopython-{b}.csv").drop(columns=['MIC'])
+                        dfs.append(temp_df)
+                    except FileNotFoundError as e:
+                        st.error(f"Missing file for {b}: {e}")
+                df = pd.concat(dfs, ignore_index=True).drop_duplicates(subset=['Sequence'])
+                st.success(f"Merged uploaded data with selected bacteria: {', '.join(Bacteria)}")
+            st.dataframe(df)
+            
         else:
             # Initialize session state for dataframe
             if "loaded_df" not in st.session_state:
@@ -300,16 +334,16 @@ with main_tab1:
                 try:
                     df = pd.read_csv(f"dataset\\biopython-{Bacteria[0]}.csv")
                     for i in range(1, len(Bacteria)):
-                        temp_df = pd.read_csv(f"dataset\\biopython-{Bacteria[i]}.csv")
-                        df = pd.merge(df, temp_df, on='sequence', suffixes=('', f'_{Bacteria[i]}')).drop_duplicates(subset=['sequence'])
+                        temp_df = pd.read_csv(f"dataset\\biopython-{Bacteria[i]}.csv").drop(columns=['MIC'])
+                        df = pd.concat([df, temp_df], ignore_index=True).drop_duplicates(subset=['Sequence'])
                     st.session_state.loaded_df = df
-                    st.success(f"Loaded data for {', '.join(Bacteria)} with {len(df)} sequences.")
+                    st.success(f"Loaded data for {', '.join(Bacteria)} with {len(df)} Sequences.")
                 except FileNotFoundError as e:
                     st.error(f"Missing file: {e}")
                     st.stop()
             else:
                 df = st.session_state.loaded_df
-                st.success(f"Using cached data for {', '.join(Bacteria)} with {len(df)} sequences.")
+                st.success(f"Using cached data for {', '.join(Bacteria)} with {len(df)} Sequences.")
 
             st.subheader("Loaded peptide data preview")
             st.dataframe(df.head())
@@ -322,7 +356,6 @@ with main_tab1:
             with st.spinner("Running optimization... This may take a few minutes."):
                 try:
                     # algorithm setup
-                    st.write("Optimization in progress...")
                     setup = algorithms_setup(
                         path=user_home,
                         df=df,
@@ -334,14 +367,14 @@ with main_tab1:
                         opt=opt,
                         constraint_dict_list=constraint_dict_list
                     )
-                    st.write("Optimization in progress...")
                     setup.run_optimization()
-                    st.write("Optimization in progress...")
                     setup.run()
                     st.success("Optimization completed successfully ✅")
 
                 except Exception as e:
                     st.error(f"Error during optimization: {e}")
+        else:
+            st.stop()
         # ----------------------------
         # Display cached results
         # ----------------------------
@@ -403,7 +436,7 @@ with main_tab1:
             fasta_path = os.path.join(user_home, f"{algo}.fasta")
             with open(fasta_path, "w") as fasta_file:
                 for _, row in merged_df_flipped.iterrows():
-                    fasta_file.write(f">{row['sequence']}\n{row['sequence']}\n")
+                    fasta_file.write(f">{row['Sequence']}\n{row['Sequence']}\n")
 
             pareto_df_flipped.to_csv(os.path.join(user_home, f"{algo} all optimize result.csv"), index=False)
             st.info(f"Optimize pareto front result saved at file: {user_home}\\{algo} all optimize result.csv")

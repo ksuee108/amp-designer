@@ -50,7 +50,7 @@ class MyProblemWithData(Problem):
             Gravy = bio_analysis.get_gravy()
             instability_index = bio_analysis.get_instability_index()
             Aliphatic_Index = bio_analysis.get_aliphatic_index()
-            Boman_index = bio_analysis.get_boman_index()
+            Boman_Index = bio_analysis.get_boman_index()
             isoelectric_point = bio_analysis.get_isoelectric_point()
             net_charge = bio_analysis.get_net_charge()
             molecular_weight = bio_analysis.get_molecular_weight()
@@ -59,8 +59,14 @@ class MyProblemWithData(Problem):
             secondary_structure_fraction_Helix = bio_analysis.get_secondary_structure_fraction()[0]
             secondary_structure_fraction_Turn = bio_analysis.get_secondary_structure_fraction()[1]
             secondary_structure_fraction_Sheet = bio_analysis.get_secondary_structure_fraction()[2]
-            Boman_Index = Boman_index
             sequenceLength = bio_analysis.get_sequenceLength()
+            amphipathicity = bio_analysis.get_amphipathicity()
+            correlation = bio_analysis.get_auto_correlation()
+            covariance = bio_analysis.get_auto_covariance()
+            hydrophobic_moenet = bio_analysis.get_hydrophobic_moenet()
+            mass = bio_analysis.get_mass()
+            mz = bio_analysis.get_mz()
+            
 
             physicochemical_properties = {
             'Gravy': Gravy,
@@ -74,7 +80,13 @@ class MyProblemWithData(Problem):
             'Secondary structure fraction Helix': secondary_structure_fraction_Helix,
             'Secondary structure fraction Turn': secondary_structure_fraction_Turn,
             'Secondary structure fraction Sheet': secondary_structure_fraction_Sheet,
-            'Boman Index': Boman_Index,}
+            'Boman Index': Boman_Index,
+            'Amphipathicity': amphipathicity,
+            'Correlation': correlation,
+            'Covariance': covariance,
+            'Hydrophobic Moenet': hydrophobic_moenet,
+            'Mass': mass,
+            'Mz': mz,}
             
             # Set objective values according to selected objectives
             for obj_idx, obj_name in enumerate(self.opt):
@@ -86,7 +98,7 @@ class MyProblemWithData(Problem):
 
             # Store objective values and sequence
             self.pareto_sequences.append({
-                'sequence': peptide,
+                'Sequence': peptide,
                 'Gravy': Gravy,
                 'Instability Index': instability_index,
                 'Aliphatic Index': Aliphatic_Index,
@@ -99,7 +111,13 @@ class MyProblemWithData(Problem):
                 'Secondary structure fraction Turn': secondary_structure_fraction_Turn,
                 'Secondary structure fraction Sheet': secondary_structure_fraction_Sheet,
                 'Boman_Index': Boman_Index,
-                'sequence Length': sequenceLength
+                'Amphipathicity': amphipathicity,
+                'Correlation': correlation,
+                'Covariance': covariance,
+                'Hydrophobic Moenet': hydrophobic_moenet,
+                'Mass': mass,
+                'Mz': mz,
+                'Sequence Length': sequenceLength
             })
             
             # Constraints setup (example)
@@ -134,7 +152,7 @@ def amino_acid_percentage(path, algorithms):
         optimized_result[name] = pd.read_csv(filepath)
             
     for algo_name, pareto_sequences in optimized_result.items():
-        for seq in pareto_sequences['sequence']:
+        for seq in pareto_sequences['Sequence']:
             for aa in seq:
                 if aa in amino_acid_counts:
                     amino_acid_counts[aa] += 1
@@ -457,7 +475,7 @@ def plot_pareto_fronts_multi(path, algorithms, optimization_directions):
 class algorithms_setup():
     def __init__(self, path, df, algorithms_list, pop_size, generations, optimization_directions, length, opt, constraint_dict_list):
         self.path = path
-        self.sequences = df['sequence']
+        self.sequences = df['Sequence']
         self.algorithms_list = algorithms_list
         self.pop_size = pop_size
         self.generations = generations
@@ -544,13 +562,13 @@ class algorithms_setup():
             res_dict = pd.DataFrame(res_dict)
 
             pareto_dict = {
-                'sequence': [entry['sequence'] for entry in self.problem.pareto_sequences],
+                'Sequence': [entry['Sequence'] for entry in self.problem.pareto_sequences],
                 'Gravy': [entry['Gravy'] for entry in self.problem.pareto_sequences],
                 'Instability Index': [entry['Instability Index'] for entry in self.problem.pareto_sequences],
                 'Aliphatic Index': [entry['Aliphatic Index'] for entry in self.problem.pareto_sequences],
                 'Boman_Index': [entry['Boman_Index'] for entry in self.problem.pareto_sequences],
                 'Molecular Weight': [entry['Molecular Weight'] for entry in self.problem.pareto_sequences],
-                'sequence Length': [entry['sequence Length'] for entry in self.problem.pareto_sequences],
+                'Sequence Length': [entry['Sequence Length'] for entry in self.problem.pareto_sequences],
                 'Isoelectric point': [entry['Isoelectric point'] for entry in self.problem.pareto_sequences],
                 'Net charge': [entry['Net charge'] for entry in self.problem.pareto_sequences],
                 'Charge at pH': [entry['Charge at pH'] for entry in self.problem.pareto_sequences],
@@ -558,6 +576,12 @@ class algorithms_setup():
                 'Secondary structure fraction Helix': [entry['Secondary structure fraction Helix'] for entry in self.problem.pareto_sequences],
                 'Secondary structure fraction Turn': [entry['Secondary structure fraction Turn'] for entry in self.problem.pareto_sequences],
                 'Secondary structure fraction Sheet': [entry['Secondary structure fraction Sheet'] for entry in self.problem.pareto_sequences],
+                'Amphipathicity': [entry['Amphipathicity'] for entry in self.problem.pareto_sequences],
+                'Correlation': [entry['Correlation'] for entry in self.problem.pareto_sequences],
+                'Covariance': [entry['Covariance'] for entry in self.problem.pareto_sequences],
+                'Hydrophobic Moenet': [entry['Hydrophobic Moenet'] for entry in self.problem.pareto_sequences],
+                'Mass': [entry['Mass'] for entry in self.problem.pareto_sequences],
+                'Mz': [entry['Mz'] for entry in self.problem.pareto_sequences],
                 'model': [name for entry in self.problem.pareto_sequences]
             }
 

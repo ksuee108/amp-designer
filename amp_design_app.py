@@ -374,8 +374,7 @@ with main_tab1:
 
                 except Exception as e:
                     st.error(f"Error during optimization: {e}")
-        else:
-            st.error(f"Error during optimization: {e}")
+
         # ----------------------------
         # Display cached results
         # ----------------------------
@@ -489,14 +488,7 @@ with main_tab3:
     Choose one or more pathogens from the sidebar.  
     The app will automatically load precomputed physicochemical property datasets associated with the selected species.
 
-    ### 2. **Define Optimization Parameters**
-    - **Population Size**: Controls the diversity of candidate sequences within the evolutionary search.
-    - **Peptide Length**: Specifies the length of generated sequences for de novo design.
-    - **Generations**: Determines the number of iterations for algorithmic evolution.
-
-    These parameters directly influence search convergence, diversity maintenance, and computational runtime.
-
-    ### 3. **Choose Optimization Algorithms**
+    ### 2. **Choose Optimization Algorithms**
     Select one or multiple multi-objective evolutionary algorithms (MOEAs), such as:
     - NSGA-II / NSGA-III  
     - R-NSGA-II / R-NSGA-III  
@@ -505,13 +497,20 @@ with main_tab3:
 
     Each algorithm presents different strengths in balancing exploration and convergence toward high-quality Pareto-optimal peptides.
 
+    ### 3. **Define Optimization Parameters**
+    - **Population Size**: Controls the diversity of candidate sequences within the evolutionary search.
+    - **Peptide Length**: Specifies the length of generated sequences for de novo design.
+    - **Generations**: Determines the number of iterations for algorithmic evolution.
+
+    These parameters directly influence search convergence, diversity maintenance, and computational runtime.
+                
     """)
-    st.image("螢幕擷取畫面 2025-11-16 012845.png")
+    st.image("side bar.png")
     st.markdown("""
     ### 4. **Select Physicochemical Objectives**
     Choose at least two descriptors for optimization.  
     Available objectives include:
-    - Hydrophobicity (Gravy)
+    - Gravy(Hydrophobicity)
     - Instability Index  
     - Isoelectric Point  
     - Net Charge  
@@ -522,20 +521,20 @@ with main_tab3:
     - Secondary Structure Fractions (Helix, Turn, Sheet)
 
     For each objective, specify whether the algorithm should **minimize** or **maximize** the descriptor.  
-    (Hydrophobicity is treated as *hydrophilicity* or *hydrophobicity* depending on user preference.)
+    (Gravy is treated as *hydrophilicity* or *hydrophobicity* depending on user preference.)
                 """)
-    st.image("螢幕擷取畫面 2025-11-16 013006.png")
+    st.image("Objectives to optimize.png")
     st.markdown("""
     ### 5. **Add Optional Constraints**
     Users may define upper/lower bounds to restrict the peptide search space.  
     For example:
     - Instability Index ≥ 40  
     - 1 ≤ Net Charge
-    - Hydrophobicity ≥ 1
+    - Gravy ≥ 1
 
     Constraints help enforce biologically realistic design regions and improve hit quality.
                 """)
-    st.image("螢幕擷取畫面 2025-11-16 013025.png")
+    st.image("constraints.png")
     st.markdown("""
     ### 6. **Run Optimization**
     Press **“Run Optimization”** to execute the selected algorithms.  
@@ -562,7 +561,9 @@ with main_tab3:
     These visualizations provide insight into peptide behavior, trade-offs among descriptors, and optimization dynamics.
 
                 """)
-    st.image("螢幕擷取畫面 2025-11-16 013229.png")
+    st.image("run.png")
+    st.image("result.png")
+    st.image("plot.png")
     st.markdown("""
     ### Summary
     This app provides a structured, multi-objective approach to AMP design by integrating algorithmic search, physicochemical evaluation, and biological constraint modeling. It aims to accelerate the rational development of antimicrobial peptides with optimized properties.

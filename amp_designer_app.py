@@ -57,7 +57,9 @@ with main_tab1:
         st.header("Select Bacteria")
         Bacteria = st.multiselect(
             "Choose bacteria",
-            options=["E. coli", "S. aureus", "P. aeruginosa", "A. baumannii"]
+            options=["E. faecium", "S. aureus", "KP", "A. baumannii", "P. aeruginosa", "E. coli", 
+                     "B. subtilis", "P. vulgaris", "Salmonella", "Listeria", 
+                     "Serratia", "Shigella", "Micrococcus"]
         )
 
         st.header("Upload Peptide Sequence")
@@ -574,8 +576,8 @@ with main_tab3:
 with main_tab4:
     st.header("Related Databases and Prediction Websites")
     AMP_databases = {
-        "Website":["Peptaibols", "Cybase", "BACTIBASE", "CAMP", "DADP", "HIPdb", "Hemolytik", "ParaPep", "CancerPPD/AntiCP 2.0", "DBAASP", "BaAMPs", "SATPdb", "DRAMP", "InverPep", "ARA-PEPs", "MBPDB", "AntiTbPdb", "LABiocin", "ADAPTABLE", "FoldamerDB", "AntiCP 2.0", "FermFooDb", "B-AMP", "SuPepMem", "ACovPepDB", "AMPDB v1", "DRAVP", "GtoPdb", "aSynPEP-DB", "AbAMPdb", "AVR/I/SSAPDB", "TAMRSA", "IAMPDB", "ABPDB"],
-        "Link":["https://peptaibol.cryst.bbk.ac.uk/home.shtml", "https://www.cybase.org.au/", "https://bactibase.pfba-lab-tun.org/main.php", "http://www.bicnirrh.res.in/antimicrobial", "http://split4.pmfst.hr/dadp/", "http://crdd.osdd.net/servers/hipdb/", "http://crdd.osdd.net/raghava/hemolytik/", "http://crdd.osdd.net/raghava/parapep/", "http://crdd.osdd.net/raghava/cancerppd/", "http://dbaasp.org/home.xhtml", "http://www.baamps.it/", "http://crdd.osdd.net/raghava/satpdb/", "http://dramp.cpu-bioinfor.org/", "http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/prospeccionydisenobiomoleculas/InverPep/public/home_en", "http://www.biw.kuleuven.be/CSB/ARA-PEPs", "http://webs.iiitd.edu.in/raghava/antitbpdb/", "https://mbpdb.nws.oregonstate.edu/", "https://labiocin.univ-lille.fr/", "http://gec.u-picardie.fr/adaptable", "http://foldamerdb.ttk.hu/", "https://webs.iiitd.edu.in/raghava/anticp2/", "https://webs.iiitd.edu.in/raghava/fermfoodb/", "https://b-amp.karishmakaushiklab.com/", "https://supepmem.com/", "http://i.uestc.edu.cn/ACovPepDB/", "https://bblserver.org.in/ampdb/", "http://dravp.cpu-bioinfor.org/", "https://www.guidetopharmacology.org", "https://asynpepdb.ppmclab.com/", "https://abampdb.mgbio.tech/", "https://bblserver.org.in/avrissa/", "https://bblserver.org.in/tamrsar/", "https://bblserver.org.in/iampdb/", "http://www.acdb.plus/ABPDB"],
+        "Website":["Peptaibols", "Cybase", "BACTIBASE", "CAMP", "HIPdb", "Hemolytik", "ParaPep", "CancerPPD/AntiCP 2.0", "DBAASP", "BaAMPs", "SATPdb", "DRAMP", "InverPep", "MBPDB", "AntiTbPdb", "LABiocin", "ADAPTABLE", "FoldamerDB", "AntiCP 2.0", "FermFooDb", "B-AMP", "SuPepMem", "ACovPepDB", "AMPDB v1", "DRAVP", "GtoPdb", "aSynPEP-DB", "AbAMPdb", "AVR/I/SSAPDB", "TAMRSA", "IAMPDB", "ABPDB"],
+        "Link":["https://peptaibol.cryst.bbk.ac.uk/home.shtml", "https://www.cybase.org.au/", "https://bactibase.pfba-lab-tun.org/main.php", "http://www.bicnirrh.res.in/antimicrobial", "http://crdd.osdd.net/servers/hipdb/", "http://crdd.osdd.net/raghava/hemolytik/", "http://crdd.osdd.net/raghava/parapep/", "http://crdd.osdd.net/raghava/cancerppd/", "http://dbaasp.org/home.xhtml", "http://www.baamps.it/", "http://crdd.osdd.net/raghava/satpdb/", "http://dramp.cpu-bioinfor.org/", "http://ciencias.medellin.unal.edu.co/gruposdeinvestigacion/prospeccionydisenobiomoleculas/InverPep/public/home_en", "https://mbpdb.nws.oregonstate.edu/", "http://webs.iiitd.edu.in/raghava/antitbpdb/", "https://labiocin.univ-lille.fr/", "http://gec.u-picardie.fr/adaptable", "http://foldamerdb.ttk.hu/", "https://webs.iiitd.edu.in/raghava/anticp2/", "https://webs.iiitd.edu.in/raghava/fermfoodb/", "https://b-amp.karishmakaushiklab.com/", "https://supepmem.com/", "http://i.uestc.edu.cn/ACovPepDB/", "https://bblserver.org.in/ampdb/", "http://dravp.cpu-bioinfor.org/", "https://www.guidetopharmacology.org", "https://asynpepdb.ppmclab.com/", "https://abampdb.mgbio.tech/", "https://bblserver.org.in/avrissa/", "https://bblserver.org.in/tamrsar/", "https://bblserver.org.in/iampdb/", "http://www.acdb.plus/ABPDB"],
     }
 
     st.markdown("### 1. AMP Databases")
@@ -584,8 +586,8 @@ with main_tab4:
 
     st.markdown("### 2. AMP Prediction Websites")
     AMP_prediction_websites = {
-        "Website":["BAGLE", "AntiBP", "AMPer", "CAMP Prediction", "antiSMASH", "AMPA", "AMP_Scanner", "AI4AXP"],
-        "Link":["http://bagel.molgenrug.nl/", "https://webs.iiitd.edu.in/raghava/antibp/submit.html", "http://marray.cmdr.ubc.ca/cgi-bin/amp.pl", "http://www.camp.bicnirrh.res.in/predict/", "http://antismash.secondarymetabolites.org/", "http://tcoffee.crg.cat/apps/ampa/do", "http://www.ampscanner.com", "https://axp.iis.sinica.edu.tw/"]
+        "Website":["BAGLE", "AntiBP", "AMPer", "CAMP Prediction", "antiSMASH", "AMPA", "AMP_Scanner", "DBAASP", "AI4AXP"],
+        "Link":["http://bagel.molgenrug.nl/", "https://webs.iiitd.edu.in/raghava/antibp/submit.html", "http://marray.cmdr.ubc.ca/cgi-bin/amp.pl", "http://www.camp.bicnirrh.res.in/predict/", "http://antismash.secondarymetabolites.org/", "http://tcoffee.crg.cat/apps/ampa/do", "http://www.ampscanner.com", "http://dbaasp.org/home.xhtml", "https://axp.iis.sinica.edu.tw/"]
     }
     df_AMP_prediction_websites = pd.DataFrame(AMP_prediction_websites)
     st.table(df_AMP_prediction_websites)
